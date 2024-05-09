@@ -1,0 +1,20 @@
+SELECT *
+FROM fortune_companies
+;
+--Which industries have the highest average PTO days?
+SELECT industry
+,ROUND(AVG (paid_time_off_days)) AS avg_industry_pto
+FROM fortune_companies
+GROUP BY industry
+ORDER BY avg_industry_pto DESC
+;
+--Which of these are small businesses(<1500 employees), medium busnesses (1500-5000), large businesses(5000-10000 employees), and corportations (>10000 employees)?
+SELECT company_name
+,CASE WHEN employees >= 10000 THEN "Corporation"
+WHEN employees >=5000 THEN "Large Business"
+WHEN employees >= 1500 THEN "Medium Business"
+ELSE "Small Business"
+END AS "business_size"
+FROM fortune_companies
+ORDER BY business_size
+;
