@@ -1,6 +1,3 @@
-SELECT *
-FROM fortune_companies
-;
 --Which industries have the highest average PTO days?
 SELECT industry
 ,ROUND(AVG (paid_time_off_days)) AS avg_industry_pto
@@ -16,5 +13,25 @@ WHEN employees >= 1500 THEN "Medium Business"
 ELSE "Small Business"
 END AS "business_size"
 FROM fortune_companies
-ORDER BY business_size
+GROUP BY business_size
+;
+--Which companies provide healthcare and also provide more than 10 weeks of maternity leave?
+SELECT company_name
+, maternity_leave_weeks
+FROM fortune_companies
+WHERE healthcare_benefits = 1
+AND maternity_leave_weeks >10
+;
+--Which industries have an average revenue of at least $200 Billion, and what are their avg revenues?
+SELECT industry
+, ROUND(AVG(revenue),1) AS avg_revenue
+FROM fortune_companies
+GROUP BY industry
+HAVING avg_revenue >= 200
+;
+-- Which company in the Retail industry has the least revenue, and what's their revenue? 
+SELECT company_name
+,MIN(revenue) AS revenue
+FROM fortune_companies
+WHERE industry = "Retail"
 ;
