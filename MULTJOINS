@@ -1,0 +1,20 @@
+SELECT Courses.CourseName
+, Author.name AS Author
+, Textbooks.Title
+
+FROM Courses
+
+INNER JOIN Textbooks
+ON Courses.CourseID = Textbooks.CourseID
+
+LEFT JOIN AuthorTextbookLink
+ON AuthorTextbookLink.TextbookID = Textbooks.TextbookID
+
+LEFT JOIN Author
+ON Author.AuthorID = AuthorTextbookLink.AuthorID
+
+
+WHERE Current = "Yes"
+AND Subject = "Economics"
+ORDER BY Name
+;
