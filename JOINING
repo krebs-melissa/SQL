@@ -1,0 +1,21 @@
+SELECT DISTINCT 
+customers.customer_id
+, customers.customer_name
+, customers.contact_email
+, shipments.shipping_method
+FROM customers
+LEFT JOIN shipments
+ON customers.customer_id = shipments.sender_id
+ORDER BY customers.customer_id
+
+;
+SELECT DISTINCT 
+customers.customer_id
+, customers.customer_name
+, customers.contact_email
+, shipments.shipping_method
+FROM customers
+INNER JOIN shipments
+ON customers.customer_id = shipments.sender_id
+ORDER BY customers.customer_id
+;
