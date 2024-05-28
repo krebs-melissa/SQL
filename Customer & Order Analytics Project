@@ -54,36 +54,60 @@ AND length(orderid) =6
 AND orderid <> 'Order ID;'
 ORDER BY customers
 ;
---1
-SELECT orderdate
-FROM BIT_DB.FebSales
-WHERE orderdate between '02/13/19 00:00' AND '02/18/19 00:00'
-;
---2
-SELECT location
-FROM BIT_DB.FebSales 
-WHERE orderdate = '02/18/19 01:35'
-;
---3
-SELECT sum(quantity)
-FROM BIT_DB.FebSales 
-WHERE orderdate like '02/18/19%'
-;
-
---4
-SELECT distinct Product
-FROM BIT_DB.FebSales
-WHERE Product like '%Batteries%'
-;
-
---5
-SELECT distinct Product, Price
-FROM BIT_DB.FebSales 
-WHERE Price like '%.99'
-;
---6
+--#8 List all the products sold in Los Angeles in February, and include how many of each were sold.
 SELECT Product, SUM(quantity)
 FROM BIT_DB.FebSales
 WHERE location like '%Los Angeles%'
 GROUP BY Product
+;
+--#9 Which locations in New York received at least 3 orders in January, and how many orders did they each receive?
+SELECT distinct location
+, count(orderID) as orders
+FROM BIT_DB.JanSales
+WHERE location like "%NY%"
+AND length(orderID) = 6
+GROUP BY location
+HAVING orders >= 3
+;
+--#10 How many of each type of headphone were sold in February?
+SELECT Product
+,sum(Quantity) as number_sold
+FROM BIT_DB.FebSales
+WHERE Product like "%eadphone%"
+AND length(orderID) = 6
+GROUP BY Product
+;
+--#11 What was the average amount spent per account in February? 
+SELECT sum(quantity*price)/count(cust.acctnum)
+FROM BIT_DB.FebSales Feb
+
+LEFT JOIN BIT_DB.customers cust
+ON Feb.orderID = cust.order_id
+
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'
+;
+
+--#12 What was the average quantity of products purchased per account in February?
+SELECT sum(quantity)/count(cust.acctnum)
+FROM BIT_DB.FebSales Feb
+
+LEFT JOIN BIT_DB.customers cust
+ON Feb.orderID = cust.order_id
+
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'
+;
+
+--#13 Which product brought in the most revenue in January and how much revenue did it bring in total?
+SELECT Product
+, sum(price*Quantity) as Revenue
+
+FROM BIT_DB.JanSales
+
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'
+GROUP BY Product
+ORDER BY Revenue desc
+LIMIT 1 
 ;
